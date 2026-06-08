@@ -6,7 +6,9 @@ import { initFlowbite } from 'flowbite';
 @Component({
   selector    : 'app-root',
   templateUrl : './app.html',
-  imports     : [ RouterOutlet ],
+  imports     : [ 
+    RouterOutlet,
+  ],
 })
 
 export class App  implements OnInit {

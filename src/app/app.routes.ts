@@ -33,7 +33,7 @@ export const routes: Routes = [
         title: 'Analitica',
     },
     {
-        path: 'expenses',
+        path: 'cards',
         loadComponent: () => import('./features/cards/presentation/pages/credit-cards/credit-cards'),
         title: 'Tarjetas',
     },
