@@ -8,7 +8,7 @@ export const routes: Routes = [
         title: 'Inicio de sesión',
     },
     {
-        path: 'auth/sign-in',
+        path: 'auth/sign-up',
         loadComponent: () => import('./features/auth/signUp/presentation/pages/signUp/signUp'),
         title: 'Registro',
     },
