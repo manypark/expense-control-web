@@ -1,9 +1,11 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { provideRouter, withViewTransitions } from '@angular/router';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 
 import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
 import { routes } from './app.routes';
+import { ErrorInterceptor } from './core/services/interceptor/http-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,5 +19,10 @@ export const appConfig: ApplicationConfig = {
         },
       }
     }) ),
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi   : true
+    }
   ],
 };
