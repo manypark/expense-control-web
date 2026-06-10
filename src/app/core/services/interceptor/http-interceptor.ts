@@ -32,12 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             break;
         }
 
-        return throwError(
-          () => new Error(
-            error.error?.message ??
-            'Unexpected error'
-          )
-        );
+        return throwError( () => new Error( error.error?.message ?? 'Unexpected error' ) );
       })
     );
   }

@@ -17,8 +17,7 @@ export class SignInDatasourceImpl {
             });
 
         } catch (error : any) {
-            console.error('SignInDatasource Error', error);
-            throw new Error( error?.message ?? 'Unexpected error' );
+            throw new Error( error?.error?.message ?? 'Unexpected error' );
         }
     }
 }

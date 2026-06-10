@@ -5,7 +5,9 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
 import { routes } from './app.routes';
+import { SignInRepository } from './features/auth/signIn/domain';
 import { ErrorInterceptor } from './core/services/interceptor/http-interceptor';
+import { SignInRepositoryImpl } from './features/auth/signIn/infrastructure/repositories/sign-in-repository';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +21,7 @@ export const appConfig: ApplicationConfig = {
         },
       }
     }) ),
+    { provide: SignInRepository, useClass: SignInRepositoryImpl },
     {
       provide : HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,

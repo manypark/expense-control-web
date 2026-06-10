@@ -8,7 +8,7 @@ export class EmailVO {
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
-      throw new Error('Invalid email format');
+      throw new Error('Formato de correo invalido');
     }
 
     return new EmailVO(email);
