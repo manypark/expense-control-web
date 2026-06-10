@@ -1,4 +1,4 @@
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { Component, inject, signal } from '@angular/core';
 import { email, form, FormField, FormRoot, minLength, pattern, required } from '@angular/forms/signals';
 
@@ -15,12 +15,13 @@ import { EmailVO, PasswordVO, SignInRequestEntity, SignInUsecase } from '../../.
     RouterLink,
     FormField,
     FormRoot,
-    NgxSonnerToaster
+    NgxSonnerToaster,
   ],
 })
 export default class SignIn {
 
   private readonly signUsecase = inject( SignInUsecase );
+  private readonly router = inject(Router);
 
   signInModel = signal({
     email   : '',
@@ -30,7 +31,14 @@ export default class SignIn {
   readonly signInMutation = injectMutation( () => ({
     mutationFn: (signInEntity:SignInRequestEntity) => this.signUsecase.execute(signInEntity),
     onSuccess : (data) => {
+
       toast.success(`Inicio de sesión exitoso`, { description: `Bienvenido - ${data.user.email}`});
+      
+      localStorage.setItem('accesToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('userLogued', data.user.email);
+
+      this.router.navigate(['/home']);
     },
     onError   : (error) => {
       toast.error( error.message );
