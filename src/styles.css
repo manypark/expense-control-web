@@ -20,3 +20,7 @@
 .button-principal {
     @apply text-white bg-gradient-to-r h-14 from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-base text-sm px-4 py-2.5 text-center leading-5 disabled:opacity-50;
 }
+
+.anim_bottom_navigation {
+    @apply inline-flex flex-col items-center justify-center px-5 rounded-2xl transition-all duration-300 ease-out hover:scale-105;
+}
