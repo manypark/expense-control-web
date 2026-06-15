@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+
+import Accounts from '../../components/accounts/accounts';
 
 @Component({
   selector    : 'app-dashboard',
   templateUrl : './dashboard.html',
   styleUrl    : './dashboard.css',
   imports: [
-    
+    Accounts
   ],
 })
 
