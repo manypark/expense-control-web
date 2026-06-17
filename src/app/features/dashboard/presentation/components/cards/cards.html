@@ -1,0 +1,41 @@
+<div class="h-full flex pt-2 flex-col mb-20 fade-in-element">
+    <div class="bg-white sticky top-0">
+        <h2 class="text-2xl font-bold pt-6 mb-6 shrink-0">
+            Cuentas activas
+        </h2>
+    </div>
+
+  @if ( casrdServices.accountsQuery.isPending() ) {
+    <div class="flex flex-col gap-y-3 pr-2 animate-pulse">
+        <div class="flex flex-col rounded-xs bg-neutral-quaternary p-14 gap-y-2"></div>
+        <div class="flex flex-col rounded-xs bg-neutral-quaternary p-14 gap-y-2"></div>
+    </div>
+  }
+
+  @if ( !casrdServices.accountsQuery.isPending() && ( casrdServices.accountsQuery.data()?.length ?? 0 > 0) ) {
+      <div class="flex-1 overflow-y-auto pr-2">
+         <div class="flex flex-col gap-y-6">
+             @for (item of casrdServices.accountsQuery.data(); track $index) {
+                 <div class="flex flex-col rounded-xs bg-[#EBF0FF] p-8 gap-y-2">
+                     <div class="flex justify-between">
+                         <div class="flex gap-x-2">
+                             <svg class="w-6 h-6 text-[#3B69FF] dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z"/>
+                             </svg>
+                             <p class="text-gray-500"> {{ item.alias }} </p>
+                         </div>
+                         <div class="flex gap-x-1 text-gray-500">
+                             <p>****</p>
+                             <p>{{ item.last4 }}</p>
+                         </div>
+                     </div>
+                     <div class="flex justify-between">
+                         <p> $ {{ item.creditLimit }} </p>
+                         <p> BALANCE </p>
+                     </div>
+                 </div>
+             }
+         </div>
+     </div>
+  }
+</div>

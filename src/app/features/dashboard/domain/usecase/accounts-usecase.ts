@@ -1,7 +1,7 @@
 import { inject, Service } from "@angular/core";
 
 import { AccountsEntity } from "../entities/accounts-entity";
-import { AccountsRepository } from "../repositories/accounts_repository";
+import { AccountsRepository } from "../repositories/accounts-repository";
 
 @Service()
 export class AccountsUsecase {

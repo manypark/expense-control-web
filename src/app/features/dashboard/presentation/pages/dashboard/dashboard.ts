@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 
-import Accounts from '../../components/accounts/accounts';
+import { Accounts, Cards } from '../../components';
 
 @Component({
   selector    : 'app-dashboard',
   templateUrl : './dashboard.html',
   styleUrl    : './dashboard.css',
   imports: [
-    Accounts
-  ],
+    Cards,
+    Accounts,
+],
 })
 
 export default class Dashboard {}

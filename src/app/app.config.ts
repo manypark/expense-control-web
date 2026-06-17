@@ -7,11 +7,10 @@ import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-exper
 import { routes } from './app.routes';
 import { SignInRepository } from './features/auth/signIn/domain';
 import { ErrorInterceptor } from './core/services/interceptor/http-error-interceptor';
-import { SignInRepositoryImpl } from './features/auth/signIn/infrastructure/repositories/sign-in-repository';
 import { authInterceptor } from './core/services/interceptor/http-token-interceptor';
-import { AccountsRepository } from './features/dashboard/domain/repositories';
-import { AccountsRepositoryImpl } from './features/dashboard/infrastructure/repositories';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { AccountsRepository, CardsRepository } from './features/dashboard/domain/repositories';
+import { SignInRepositoryImpl } from './features/auth/signIn/infrastructure/repositories/sign-in-repository';
+import { AccountsRepositoryImpl, CardsRepositoryImpl } from './features/dashboard/infrastructure/repositories';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,6 +25,7 @@ export const appConfig: ApplicationConfig = {
         },
       }
     }) ),
+    { provide: CardsRepository, useClass: CardsRepositoryImpl },
     { provide: SignInRepository, useClass: SignInRepositoryImpl },
     { provide: AccountsRepository, useClass: AccountsRepositoryImpl },
     {

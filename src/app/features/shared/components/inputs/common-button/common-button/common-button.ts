@@ -4,9 +4,6 @@ import { Component, input } from '@angular/core';
   selector    : 'app-common-button',
   templateUrl : './common-button.html',
   styleUrl    : './common-button.css',
-  imports     : [
-    
-  ],
 })
 
 export class CommonButton {

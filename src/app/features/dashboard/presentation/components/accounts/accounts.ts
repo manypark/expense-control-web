@@ -11,7 +11,9 @@ import { AccountsServices } from '../../signals';
   styleUrl    : './accounts.css',
   imports     : [ DecimalPipe ],
 })
-export default class Accounts {
+export class Accounts {
+
+  readonly accountsServices = inject(AccountsServices);
 
   constructor() {
     effect( () => {
@@ -104,8 +106,6 @@ export default class Accounts {
       }, 100);
     });
   }
-
-  readonly accountsServices = inject(AccountsServices);
 
   readonly totalBalance = computed(() => {
     const accounts = this.accountsServices.accountsQuery.data() ?? [];
