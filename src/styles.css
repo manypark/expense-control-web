@@ -24,3 +24,21 @@
 .anim_bottom_navigation {
     @apply inline-flex flex-col items-center justify-center px-5 rounded-2xl transition-all duration-300 ease-out hover:scale-105;
 }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in-element {
+    animation: fadeIn 1s ease-in-out;
+}
+
+.fade-out {
+  animation: fadeOut 1s ease-in forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}   

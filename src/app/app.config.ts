@@ -11,6 +11,7 @@ import { SignInRepositoryImpl } from './features/auth/signIn/infrastructure/repo
 import { authInterceptor } from './core/services/interceptor/http-token-interceptor';
 import { AccountsRepository } from './features/dashboard/domain/repositories';
 import { AccountsRepositoryImpl } from './features/dashboard/infrastructure/repositories';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
