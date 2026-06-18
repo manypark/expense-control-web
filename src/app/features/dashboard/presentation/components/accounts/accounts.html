@@ -1,22 +1,39 @@
-<div class="p-4">
-    @if( accountsServices.accountsQuery.isPending() ) {
-        <div role="status" class="space-y-8 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center">
-            <div class="w-full flex flex-col gap-y-2 mb-12">
-                <div class="h-3.5 bg-neutral-quaternary rounded-full w-48 mb-4"></div>
-                <div class="h-3.5 bg-neutral-quaternary rounded-full w-40 mb-4"></div>
-                <div class="h-100 bg-neutral-quaternary rounded-xl w-full mb-4"></div>
+@if( accountsServices.accountsQuery.isPending() ) {
+    <div role="status" class="animate-pulse">
+        <div class="mb-12 flex flex-col gap-y-3">
+            <div class="h-6 w-44 rounded-full bg-gray-200"></div>
+            <div class="h-8 w-56 rounded-full bg-gray-200"></div>
+            <div class="h-6 w-36 rounded-full bg-gray-200"></div>
+        </div>
+        <div class="space-y-7">
+            <div class="h-9 w-full rounded-full bg-gray-200"></div>
+            <div class="h-9 w-full rounded-full bg-gray-200"></div>
+            <div class="h-9 w-full rounded-full bg-gray-200"></div>
+        </div>
+    </div>
+} @else {
+    <section class="fade-in-element">
+        <div class="mb-12 flex items-start">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-700">Balance total</h2>
+                <p class="mt-2 text-3xl font-bold text-blue-700">
+                    ${{ totalBalance() | number:'1.2-2' }}
+                </p>
             </div>
         </div>
-    } @else {
 
-        <div class="flex flex-col gap-y-2 mb-12 fade-in-element">
-            <h2 class="text-3xl text-gray-500"> Balance total </h2>
-            <p class="text-2xl text-[#3B69FF] font-bold"> $ {{ totalBalance() | number }} </p>
+        <div class="space-y-6">
+            @for (account of accounts(); track account.id) {
+                <div>
+                    <div class="mb-2 flex items-center justify-between gap-x-4">
+                        <p class="text-base font-medium text-gray-700">{{ account.name }}</p>
+                        <p class="shrink-0 text-base font-bold text-gray-900">${{ account.balance | number:'1.2-2' }}</p>
+                    </div>
+                    <div class="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                        <div class="h-full rounded-full bg-blue-700" [style.width]="barWidth(account)"></div>
+                    </div>
+                </div>
+            }
         </div>
-
-        <div class="w-full bg-neutral-primary-soft border border-default rounded-base shadow-xs p-4 md:p-6 fade-in-element">
-            <div id="bar-chart"></div>
-        </div>
-    }
-
-</div>
+    </section>
+}
