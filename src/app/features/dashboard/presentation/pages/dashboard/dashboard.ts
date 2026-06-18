@@ -1,7 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Component } from '@angular/core';
 
-import { Accounts, Cards } from '../../components';
+import { Accounts, Cards, ExpenseMonthly } from '../../components';
 import { AccountsServices } from '../../signals';
 
 @Component({
@@ -12,18 +12,10 @@ import { AccountsServices } from '../../signals';
     Cards,
     Accounts,
     DecimalPipe,
+    ExpenseMonthly,
   ],
 })
 export default class Dashboard {
-  readonly monthlyTrend = [
-    { month: 'Ene', value: 38 },
-    { month: 'Feb', value: 54 },
-    { month: 'Mar', value: 44 },
-    { month: 'Abr', value: 68 },
-    { month: 'May', value: 51 },
-    { month: 'Jun', value: 74 },
-  ];
-
   readonly recentTransactions = [
     {
       merchant: 'Whole Foods Market',
