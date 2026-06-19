@@ -1,5 +1,5 @@
 <main class="min-h-screen bg-[#EBF0FF] px-4 pb-28 pt-6 sm:px-8 lg:px-10">
-  <div class="mx-auto grid max-w-7xl grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)]">
+  <div class="mx-auto grid max-w-8xl grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)]">
     <section class="space-y-6">
       
       <div class="rounded-lg border-2 border-white bg-gray-100 p-6 shadow-md sm:p-7">
@@ -19,7 +19,12 @@
     </section>
 
     <aside class="space-y-6">
-
+      
+      <div class="rounded-lg border-2 border-white bg-gray-100 p-6 shadow-md sm:p-7">
+        <!-- Gastos por categoria -->
+        <app-resume-categories />
+      </div>
+      
       <div class="rounded-lg border-2 border-white bg-gray-100 p-6 shadow-md sm:p-7">
         <app-actives-accounts />
       </div>
@@ -29,10 +34,6 @@
         <app-cards />
       </div>
 
-      <div class="rounded-lg border-2 border-white bg-gray-100 p-6 shadow-md sm:p-7">
-        <!-- Gastos por categoria -->
-        <app-resume-categories />
-      </div>
     </aside>
   </div>
 </main>

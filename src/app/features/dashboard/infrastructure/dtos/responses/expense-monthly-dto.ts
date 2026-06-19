@@ -11,4 +11,15 @@ export interface ExpenseMonthlyDto {
     userId:         string;
     createdAt:      string;
     updatedAt:      string;
+    creditCard:     CreditCardDto | null;
+}
+
+export interface CreditCardDto {
+    id:          string;
+    alias:       string;
+    bank:        string;
+    last4:       string;
+    closingDay:  number;
+    dueDay:      number;
+    creditLimit: number;
 }

@@ -1,3 +1,5 @@
+import { CreditCardEntity } from "./recent-transaction";
+
 export interface ExpenseMonthlyEntity {
     id:             string;
     title:          string;
@@ -11,4 +13,5 @@ export interface ExpenseMonthlyEntity {
     userId:         string;
     createdAt:      string;
     updatedAt:      string;
+    creditCard:     CreditCardEntity | null;
 }
