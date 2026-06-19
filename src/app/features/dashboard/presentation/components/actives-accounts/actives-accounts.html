@@ -1,0 +1,29 @@
+<!-- Ceuntas activas -->
+<h2 class="mb-7 text-lg font-bold text-gray-900">Cuentas activas</h2>
+
+@if (accountsServices.accountsQuery.isPending()) {
+    <div class="space-y-4 animate-pulse">
+    <div class="h-24 rounded-lg bg-gray-200"></div>
+    <div class="h-24 rounded-lg bg-gray-200"></div>
+    <div class="h-24 rounded-lg bg-gray-200"></div>
+    </div>
+} @else {
+    <div class="space-y-4">
+    @for (account of accountsServices.accountsQuery.data(); track account.id) {
+        <article class="flex items-center justify-between gap-x-4 rounded-lg border border-gray-200 bg-gray-50 p-5">
+        <div class="flex min-w-0 items-center gap-x-4">
+            <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M5 10v9h14v-9M7 6l5-3 5 3M7 14h.01M11 14h.01M15 14h.01"/>
+            </svg>
+            </span>
+            <div class="min-w-0">
+            <p class="truncate font-bold text-gray-900">{{ account.name }}</p>
+            <p class="mt-1 text-sm font-medium text-gray-500">{{ account.code }}</p>
+            </div>
+        </div>
+        <p class="shrink-0 font-bold text-gray-900">${{ account.balance | number:'1.2-2' }}</p>
+        </article>
+    }
+    </div>
+}

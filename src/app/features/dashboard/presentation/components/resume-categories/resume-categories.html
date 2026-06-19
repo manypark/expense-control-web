@@ -1,0 +1,38 @@
+
+    <h2 class="mb-7 text-lg font-bold text-gray-900">Resumen de categorías</h2>
+
+    <div class="flex flex-col items-center gap-6 sm:flex-row xl:flex-col 2xl:flex-row">
+        <div class="relative h-36 w-36 shrink-0 rounded-full" style="background: conic-gradient(#1d4ed8 0 40%, #60a5fa 40% 65%, #d1d5db 65% 100%);">
+        <div class="absolute inset-4 flex flex-col items-center justify-center rounded-full bg-white">
+            <p class="text-lg font-bold text-gray-900">$3.2k</p>
+            <p class="text-xs text-gray-500">Total</p>
+        </div>
+        </div>
+
+        <div class="w-full space-y-3">
+        @for (category of categories; track category.label) {
+            <div class="flex items-center justify-between gap-x-4 text-sm">
+            <div class="flex items-center gap-x-2">
+                <span class="h-2.5 w-2.5 rounded-full" [class]="category.color"></span>
+                <p class="font-semibold text-gray-700">{{ category.label }}</p>
+            </div>
+            <p class="font-bold text-gray-900">{{ category.value }}%</p>
+            </div>
+        }
+        </div>
+    </div>
+
+    <div class="mt-8 space-y-5">
+        <p class="text-xs font-bold uppercase text-gray-500">Gastos por tarjeta</p>
+        @for (expense of expensesByCard; track expense.card) {
+        <div>
+            <div class="mb-2 flex items-center justify-between gap-x-4">
+            <p class="font-medium text-gray-700">{{ expense.card }}</p>
+            <p class="font-bold text-gray-900">${{ expense.amount | number:'1.2-2' }}</p>
+            </div>
+            <div class="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+            <div class="h-full rounded-full bg-blue-700" [style.width.%]="expense.progress"></div>
+            </div>
+        </div>
+        }
+    </div>

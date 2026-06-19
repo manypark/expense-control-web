@@ -5,9 +5,9 @@ import { AccountsServices } from '../../signals';
 import { AccountsEntity } from '../../../domain/entities';
 
 @Component({
-  selector    : 'app-accounts',
-  templateUrl : './accounts.html',
-  styleUrl    : './accounts.css',
+  selector    : 'app-total-balance',
+  templateUrl : './total-balance.html',
+  styleUrl    : './total-balance.css',
   imports     : [ DecimalPipe ],
 })
 export class Accounts {
@@ -29,6 +29,5 @@ export class Accounts {
     if (!total) return '0%';
 
     return `${Math.max( (account.balance / total) * 100, 4 )}%`;
-  }
-  
+  } 
 }
