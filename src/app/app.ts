@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { AfterViewInit, Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { initFlowbite } from 'flowbite';
@@ -13,11 +13,11 @@ import { NgxSonnerToaster } from "ngx-sonner";
 ],
 })
 
-export class App  implements OnInit {
+export class App  implements AfterViewInit {
   
   protected readonly title = signal('expense-app-web');
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     initFlowbite();
   }
 }
