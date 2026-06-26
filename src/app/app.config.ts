@@ -6,9 +6,11 @@ import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-exper
 
 import { routes } from './app.routes';
 import { SignInRepository } from './features/auth/signIn/domain';
-import { ErrorInterceptor } from './core/services/interceptor/http-error-interceptor';
 import { authInterceptor } from './core/services/interceptor/http-token-interceptor';
+import { ErrorInterceptor } from './core/services/interceptor/http-error-interceptor';
 import { SignInRepositoryImpl } from './features/auth/signIn/infrastructure/repositories/sign-in-repository';
+import { RecentTransactionFilterRepository } from './features/shared/components/common-table/domain/repositories';
+import { RecentTransacionFilterRepositoryImpl } from './features/shared/components/common-table/infrastructure/repositories';
 import { AccountsRepository, CardsRepository, ExpenseMonthlyRepository, RecentTransactionRepository } from './features/dashboard/domain/repositories';
 import { AccountsRepositoryImpl, CardsRepositoryImpl, ExpenseMonthlyRepositoryImpl, RecentTransacionRepositoryImpl } from './features/dashboard/infrastructure/repositories';
 
@@ -30,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     { provide: AccountsRepository, useClass: AccountsRepositoryImpl },
     { provide: ExpenseMonthlyRepository, useClass: ExpenseMonthlyRepositoryImpl },
     { provide: RecentTransactionRepository, useClass: RecentTransacionRepositoryImpl },
+    { provide: RecentTransactionFilterRepository, useClass: RecentTransacionFilterRepositoryImpl },
     {
       provide : HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,

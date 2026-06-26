@@ -3,12 +3,13 @@ import { AfterViewInit, Component } from '@angular/core';
 import { Drawer } from 'flowbite';
 import { CommonButton } from "../../../../shared/components/inputs";
 import { DateRangePicker } from 'flowbite-datepicker';
+import { CommonTable } from "../../../../shared/components/common-table/presentation/pages/common-table";
 
 @Component({
   selector    : 'app-expenses',
   templateUrl : './expenses.html',
   styleUrl    : './expenses.css',
-  imports: [CommonButton],
+  imports: [CommonButton, CommonTable],
 })
 
 export default class Expenses implements AfterViewInit {

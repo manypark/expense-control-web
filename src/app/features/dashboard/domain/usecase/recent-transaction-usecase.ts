@@ -1,7 +1,7 @@
 import { inject, Service } from "@angular/core";
 
-import { RecentTransactionEntity } from "../entities";
 import { RecentTransactionRepository } from "../repositories";
+import { RecentTransactionEntity } from "../../../shared/entities/recent-transaction";
 
 @Service()
 export class RecentTransactionUsecase {

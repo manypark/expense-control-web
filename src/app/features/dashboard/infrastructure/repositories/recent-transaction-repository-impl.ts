@@ -1,8 +1,8 @@
 import { inject, Service } from "@angular/core";
 
-import { RecentTransactionEntity } from "../../domain/entities";
 import { RecentTransactionDatasourceImpl } from "../datasource";
 import { RecentTransactionRepository } from "../../domain/repositories";
+import { RecentTransactionEntity } from "../../../shared/entities/recent-transaction";
 
 @Service()
 export class RecentTransacionRepositoryImpl implements RecentTransactionRepository {

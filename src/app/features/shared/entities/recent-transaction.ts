@@ -7,11 +7,11 @@ export interface RecentTransactionEntity {
     incurredAt:     Date;
     statementYear:  number;
     statementMonth: number;
-    creditCardId:   string;
+    creditCardId?:   string;
     userId:         string;
     createdAt:      Date;
     updatedAt:      Date;
-    creditCard:     CreditCardEntity;
+    creditCard?:     CreditCardEntity;
 }
 
 export interface CreditCardEntity {

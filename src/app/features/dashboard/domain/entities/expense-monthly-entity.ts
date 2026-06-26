@@ -1,4 +1,4 @@
-import { CreditCardEntity } from "./recent-transaction";
+import { CreditCardEntity } from "../../../shared/entities/recent-transaction";
 
 export interface ExpenseMonthlyEntity {
     id:             string;
