@@ -1,0 +1,15 @@
+<div class="grid" [class]="gap()">
+    <h3 [class]="classTitle()"> {{ title() }} </h3>
+    <select
+        [id]="id()"
+        [disabled]="disabled()"
+        (change)="onChange($event)"
+        class="input-rounded">
+
+        <option value="" selected> {{ placeholder() }} </option>
+
+        @for (option of options(); track option.value) {
+            <option [value]="option.value"> {{ option.label }} </option>
+        }
+    </select>
+</div>
