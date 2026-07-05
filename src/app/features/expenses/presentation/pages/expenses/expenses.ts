@@ -8,6 +8,7 @@ import { CommonButton, CommonInput, CommonSelect } from "../../../../shared/comp
 import { CommonTable } from "../../../../shared/components/common-table/presentation/pages/common-table";
 import { CardsServices } from '../../../../dashboard/presentation/signals';
 import { ExpensesService } from '../../services/expensesService';
+import { RecentTransactionEntity } from '../../../../shared/entities';
 
 @Component({
   selector    : 'app-expenses',
@@ -95,6 +96,15 @@ export default class Expenses implements AfterViewInit {
 
   showSidebar() {
     this.expensesService.resetForm();
+    this.openExpenseDrawer();
+  }
+
+  onEditExpense(expense: RecentTransactionEntity) {
+    this.expensesService.setExpenseToEdit(expense);
+    this.openExpenseDrawer();
+  }
+
+  private openExpenseDrawer() {
     this.isExpenseDrawerOpen.set(true);
 
     setTimeout(() => {

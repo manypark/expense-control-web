@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 
 import { RecentTransactionsFilterServices } from '../signals';
+import { RecentTransactionEntity } from '../../../../entities';
 
 @Component({
   selector    : 'app-common-table',
@@ -15,5 +16,10 @@ import { RecentTransactionsFilterServices } from '../signals';
 export class CommonTable {
 
   readonly recetnTrasacntionFilterServices = inject(RecentTransactionsFilterServices);
+  editExpense = output<RecentTransactionEntity>();
+
+  onEditExpense(expense: RecentTransactionEntity) {
+    this.editExpense.emit(expense);
+  }
 
 }

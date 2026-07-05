@@ -15,4 +15,12 @@ export class ExpensesDatasourceImpl {
             throw new Error( error?.error?.message ?? 'Unexpected error' );
         }
     }
+
+    async updateExpense(expenseId: string, expense: Partial<CreateExpenseEntity>) : Promise<ExpenseEntity> {
+        try {
+            return await this.httpClient.patch( `/expenses/${expenseId}`, expense );
+        } catch (error : any) {
+            throw new Error( error?.error?.message ?? 'Unexpected error' );
+        }
+    }
 }

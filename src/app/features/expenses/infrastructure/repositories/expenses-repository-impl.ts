@@ -11,4 +11,8 @@ export class ExpensesRepositoryImpl implements ExpensesRepository {
     createExpense(expense: CreateExpenseEntity): Promise<ExpenseEntity> {
         return this.expensesDatasource.createExpense(expense);
     }
+
+    updateExpense(expenseId: string, expense: Partial<CreateExpenseEntity>): Promise<ExpenseEntity> {
+        return this.expensesDatasource.updateExpense(expenseId, expense);
+    }
 }

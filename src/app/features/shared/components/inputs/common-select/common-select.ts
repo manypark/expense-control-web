@@ -25,6 +25,8 @@ export class CommonSelect {
 
   options = input.required<SelectOption[]>();
 
+  value = input<string>('');
+
   disabled = input<boolean>(false);
 
   valueChange = output<string>();
