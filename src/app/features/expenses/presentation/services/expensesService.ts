@@ -11,6 +11,7 @@ export class ExpensesService {
 
     private readonly queryClient = injectQueryClient();
     private readonly createExpenseUsecase = inject( CreateExpenseUsecase );
+    onExpenseCreated?: () => void;
 
     // ************* || form modelo || *************
     expenseModel = signal({
@@ -27,14 +28,8 @@ export class ExpensesService {
         mutationFn: (expense: CreateExpenseEntity) => this.createExpenseUsecase.execute(expense),
         onSuccess : () => {
             toast.success('Gasto guardado correctamente');
-            this.expenseModel.set({
-                title       : '',
-                description : '',
-                category    : '',
-                amount      : '',
-                date        : '',
-                cardId      : '',
-            });
+            this.resetForm();
+            this.onExpenseCreated?.();
             this.queryClient.invalidateQueries({ queryKey: ['get-recent-filter-transaction'] });
         },
         onError   : (error) => { toast.error( error.message ); },
@@ -83,6 +78,18 @@ export class ExpensesService {
 
     setCard(cardId: string) {
         this.expenseModel.update((value) => ({ ...value, cardId }));
+    }
+
+    resetForm() {
+        this.expenseForm().reset();
+        this.expenseModel.set({
+            title       : '',
+            description : '',
+            category    : '',
+            amount      : '',
+            date        : '',
+            cardId      : '',
+        });
     }
 
     private parseDateToIso(date: string): string {

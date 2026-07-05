@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, NgZone, computed, inject } from '@angular/core';
+import { AfterViewInit, Component, NgZone, computed, inject, signal } from '@angular/core';
 import { FormRoot } from '@angular/forms/signals';
 
 import { Datepicker, Drawer } from 'flowbite';
@@ -24,7 +24,12 @@ export default class Expenses implements AfterViewInit {
 
    private picker?: DateRangePicker;
    private pickerExpense?: Datepicker;
-   private drawer!: Drawer;
+   private drawer?: Drawer;
+   isExpenseDrawerOpen = signal(false);
+
+   constructor() {
+    this.expensesService.onExpenseCreated = () => this.closeSidebar(false);
+   }
 
    cardOptions = computed(() => [
     {
@@ -77,21 +82,46 @@ export default class Expenses implements AfterViewInit {
   ];
 
   ngAfterViewInit(): void {
-
-    const target = document.getElementById('drawer-navigation');
-    this.drawer = new Drawer(target!);
-
     const element = document.getElementById('date-range-picker');
-    const elementDatePicker = document.getElementById('default-datepicker');
 
     if (!element) { return; }
-    if (!elementDatePicker) { return; }
 
     this.picker = new DateRangePicker(element, {
       autohide: true,
       format: 'dd/mm/yyyy'
     });
-    
+
+  }
+
+  showSidebar() {
+    this.expensesService.resetForm();
+    this.isExpenseDrawerOpen.set(true);
+
+    setTimeout(() => {
+      this.initializeExpenseDrawer();
+      this.drawer?.show();
+    });
+  }
+
+  closeSidebar(resetForm = true) {
+    this.drawer?.hide();
+    this.drawer = undefined;
+    this.pickerExpense = undefined;
+    this.isExpenseDrawerOpen.set(false);
+
+    if (resetForm) {
+      this.expensesService.resetForm();
+    }
+  }
+
+  private initializeExpenseDrawer() {
+    const target = document.getElementById('drawer-navigation');
+    const elementDatePicker = document.getElementById('default-datepicker');
+
+    if (!target || !elementDatePicker) { return; }
+
+    this.drawer = new Drawer(target);
+
     this.pickerExpense = new Datepicker(elementDatePicker, {
       autohide: true,
       format: 'dd/mm/yyyy'
@@ -102,11 +132,6 @@ export default class Expenses implements AfterViewInit {
         this.expensesService.setDate((elementDatePicker as HTMLInputElement).value);
       });
     });
-
-  }
-
-  showSidebar() {
-    this.drawer.toggle();
   }
 
   onCategoryChange( emit:any ) {
