@@ -1,25 +1,42 @@
-import { AfterViewInit, Component, signal } from '@angular/core';
+import { AfterViewInit, Component, NgZone, computed, inject } from '@angular/core';
+import { FormRoot } from '@angular/forms/signals';
 
 import { Datepicker, Drawer } from 'flowbite';
 import { DateRangePicker } from 'flowbite-datepicker';
 
 import { CommonButton, CommonInput, CommonSelect } from "../../../../shared/components/inputs";
 import { CommonTable } from "../../../../shared/components/common-table/presentation/pages/common-table";
-import { email, form, minLength, pattern, required } from '@angular/forms/signals';
-import { EmailVO, PasswordVO } from '../../../../auth/signIn/domain';
+import { CardsServices } from '../../../../dashboard/presentation/signals';
+import { ExpensesService } from '../../services/expensesService';
 
 @Component({
   selector    : 'app-expenses',
   templateUrl : './expenses.html',
   styleUrl    : './expenses.css',
-  imports: [CommonButton, CommonTable, CommonInput, CommonSelect],
+  imports: [FormRoot, CommonButton, CommonTable, CommonInput, CommonSelect],
 })
 
 export default class Expenses implements AfterViewInit {
 
+   readonly expensesService = inject( ExpensesService );
+   readonly cardsServices = inject( CardsServices );
+   private readonly ngZone = inject( NgZone );
+
    private picker?: DateRangePicker;
    private pickerExpense?: Datepicker;
    private drawer!: Drawer;
+
+   cardOptions = computed(() => [
+    {
+      label: 'Contado',
+      value: 'cash'
+    },
+    ...(this.cardsServices.accountsQuery.data() ?? []).map((card) => ({
+      label: `${card.alias} - ${card.bank} ****${card.last4}`,
+      value: card.id,
+    }))
+   ]);
+
    categories = [
     {
       label: 'Alimentos',
@@ -59,29 +76,6 @@ export default class Expenses implements AfterViewInit {
     }
   ];
 
-   // ************* || form modelo || *************
-    expenseModel = signal({
-        title       : '',
-        description : '',
-        category    : '',
-        amount      : '',
-        date        : '',
-        cardId      : '',
-    });
-
-  // ************* || validacion y submit de formulario || *************
-  expenseForm = form(
-    this.expenseModel, 
-    ( schema ) => {},
-    { 
-      submission: {
-        action : async (field) => {
-          return null;
-        },
-      }
-
-    }
-  );
   ngAfterViewInit(): void {
 
     const target = document.getElementById('drawer-navigation');
@@ -103,6 +97,12 @@ export default class Expenses implements AfterViewInit {
       format: 'dd/mm/yyyy'
     });
 
+    elementDatePicker.addEventListener('changeDate', () => {
+      this.ngZone.run(() => {
+        this.expensesService.setDate((elementDatePicker as HTMLInputElement).value);
+      });
+    });
+
   }
 
   showSidebar() {
@@ -113,8 +113,17 @@ export default class Expenses implements AfterViewInit {
     console.log(emit);
   }
 
-  onCategoryChangeInput( emit:any ) {
-    console.log(emit);
+  onCategoryChangeInput( category:string ) {
+    this.expensesService.setCategory(category);
+  }
+
+  onCardChange( cardId:string ) {
+    this.expensesService.setCard(cardId);
+  }
+
+  onDateChange( event: Event ) {
+    const date = (event.target as HTMLInputElement).value;
+    this.expensesService.setDate(date);
   }
 
 }

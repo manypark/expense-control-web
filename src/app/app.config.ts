@@ -13,6 +13,8 @@ import { RecentTransactionFilterRepository } from './features/shared/components/
 import { RecentTransacionFilterRepositoryImpl } from './features/shared/components/common-table/infrastructure/repositories';
 import { AccountsRepository, CardsRepository, ExpenseMonthlyRepository, RecentTransactionRepository } from './features/dashboard/domain/repositories';
 import { AccountsRepositoryImpl, CardsRepositoryImpl, ExpenseMonthlyRepositoryImpl, RecentTransacionRepositoryImpl } from './features/dashboard/infrastructure/repositories';
+import { ExpensesRepository } from './features/expenses/domain';
+import { ExpensesRepositoryImpl } from './features/expenses/infrastructure/repositories';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     { provide: CardsRepository, useClass: CardsRepositoryImpl },
     { provide: SignInRepository, useClass: SignInRepositoryImpl },
     { provide: AccountsRepository, useClass: AccountsRepositoryImpl },
+    { provide: ExpensesRepository, useClass: ExpensesRepositoryImpl },
     { provide: ExpenseMonthlyRepository, useClass: ExpenseMonthlyRepositoryImpl },
     { provide: RecentTransactionRepository, useClass: RecentTransacionRepositoryImpl },
     { provide: RecentTransactionFilterRepository, useClass: RecentTransacionFilterRepositoryImpl },
