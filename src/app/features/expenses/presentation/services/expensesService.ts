@@ -147,8 +147,8 @@ export class ExpensesService {
     }
 
     private buildExpensePayload(value: ExpenseFormModel): CreateExpenseEntity {
+        const [day, month, year] = this.getDateParts(value.date);
         const incurredAt = this.parseDateToIso(value.date);
-        const incurredDate = new Date(incurredAt);
 
         return {
             title         : value.title,
@@ -156,8 +156,8 @@ export class ExpensesService {
             category      : value.category,
             amount        : Number(value.amount),
             incurredAt,
-            statementYear : incurredDate.getUTCFullYear(),
-            statementMonth: incurredDate.getUTCMonth() + 1,
+            statementYear : year,
+            statementMonth: month,
             creditCardId  : value.cardId === 'cash' || !value.cardId ? null : value.cardId,
         };
     }
@@ -180,8 +180,12 @@ export class ExpensesService {
     }
 
     private parseDateToIso(date: string): string {
-        const [day, month, year] = date.split('/').map(Number);
-        return new Date(Date.UTC(year, month - 1, day)).toISOString();
+        const [day, month, year] = this.getDateParts(date);
+        return new Date(year, month - 1, day).toISOString();
+    }
+
+    private getDateParts(date: string): [number, number, number] {
+        return date.split('/').map(Number) as [number, number, number];
     }
 
     private formatDateToInput(date: Date | string): string {

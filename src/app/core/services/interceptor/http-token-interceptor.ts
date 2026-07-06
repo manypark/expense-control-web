@@ -1,76 +1,106 @@
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
-  HttpRequest,
+  HttpClient,
+  HttpErrorResponse,
   HttpEvent,
   HttpHandlerFn,
-  HttpErrorResponse,
+  HttpRequest,
 } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
-import { HttpClientService } from '../http/http-services-impl';
+import { BehaviorSubject, Observable, catchError, filter, finalize, switchMap, take, throwError } from 'rxjs';
+
+import { environment } from '../../../../enviroments/environment';
+
+interface RefreshTokenResponse {
+  accessToken?: string;
+  refreshToken?: string;
+  token?: string;
+}
+
+let isRefreshingToken = false;
+const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-
-  const http = inject(HttpClientService);
-  
+  const http = inject(HttpClient);
   const router = inject(Router);
-
   const token = localStorage.getItem('accesToken');
 
-  // Rutas donde no queremos agregar el token
-  const skipUrls = [ '/auth/login', '/auth/refreshToken' ];
-
-  const isSkip = skipUrls.some(u => req.url.includes(u));
-
-  // Clonar el request sólo si tenemos token y no es ruta ignorada
-  const authReq = (!isSkip && token) ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
+  const skipUrls = [ '/auth/login', '/auth/refresh' ];
+  const isSkip = skipUrls.some((url) => req.url.includes(url));
+  const authReq = (!isSkip && token) ? addTokenHeader(req, token) : req;
 
   return next(authReq).pipe(
-    catchError((err: unknown) => {
-      if (err instanceof HttpErrorResponse && err.status === 401 && !req.url.includes('/auth/refreshToken')) {
-        // Intentar refresh token
-        // return handle401Error(authReq, next, http, router);
+    catchError((error: unknown) => {
+      if (error instanceof HttpErrorResponse && error.status === 401 && !isSkip) {
+        return handle401Error(authReq, next, http, router);
       }
-      // Si no es 401 o es la ruta de refresh ya, simplemente propaga el error
-      return throwError(() => err);
+
+      return throwError(() => error);
     })
   );
-};
+}
 
-// function handle401Error(
-//   req: HttpRequest<unknown>,
-//   next: HttpHandlerFn,
-//   http: HttpClientService,
-//   router: Router
-// ): Observable<HttpEvent<unknown>> {
-//   const currentToken = localStorage.getItem('token');
-//   if (!currentToken) {
-//     redirectToLogin(router);
-//     return throwError(() => new Error('No token to refresh'));
-//   }
+function handle401Error(
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn,
+  http: HttpClient,
+  router: Router
+): Observable<HttpEvent<unknown>> {
+  const refreshToken = localStorage.getItem('refreshToken');
 
-//   // Llamada para refrescar token
-//   return http.post<{ token: string }>('/auth/refreshToken', { token: currentToken }).pipe(
-//     switchMap(response => {
-//       const newToken = response.token;
-//       // actualizar localStorage
-//       localStorage.setItem('token', newToken);
+  if (!refreshToken) {
+    redirectToLogin(router);
+    return throwError(() => new Error('No refresh token found'));
+  }
 
-//       // reintentar la petición original con el nuevo token
-//       const retryReq = req.clone({
-//         setHeaders: { Authorization: `Bearer ${newToken}` },
-//       });
-//       return next(retryReq);
-//     }),
-//     catchError(err2 => {
-//       // Si el refresh falla, redirigir
-//       redirectToLogin(router);
-//       return throwError(() => err2);
-//     })
-//   );
-// }
+  if (isRefreshingToken) {
+    return refreshTokenSubject.pipe(
+      filter((token): token is string => token !== null),
+      take(1),
+      switchMap((newToken) => next(addTokenHeader(req, newToken)))
+    );
+  }
 
-// function redirectToLogin(router: Router) {
-//   localStorage.removeItem('token');
-//   router.navigate(['/auth/login']);
-// }
+  isRefreshingToken = true;
+  refreshTokenSubject.next(null);
+
+  return http.post<RefreshTokenResponse>(`${environment.apiUrl}/auth/refresh`, { refreshToken }).pipe(
+    switchMap((response) => {
+      const newAccessToken = response.accessToken ?? response.token;
+
+      if (!newAccessToken) {
+        redirectToLogin(router);
+        return throwError(() => new Error('Refresh response does not include an access token'));
+      }
+
+      localStorage.setItem('accesToken', newAccessToken);
+
+      if (response.refreshToken) {
+        localStorage.setItem('refreshToken', response.refreshToken);
+      }
+
+      refreshTokenSubject.next(newAccessToken);
+      return next(addTokenHeader(req, newAccessToken));
+    }),
+    catchError((error) => {
+      redirectToLogin(router);
+      return throwError(() => error);
+    }),
+    finalize(() => {
+      isRefreshingToken = false;
+    })
+  );
+}
+
+function addTokenHeader(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
+  return req.clone({
+    setHeaders: { Authorization: `Bearer ${token}` },
+  });
+}
+
+function redirectToLogin(router: Router) {
+  localStorage.removeItem('accesToken');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('userLogued');
+  router.navigate(['/auth/sign-in']);
+}

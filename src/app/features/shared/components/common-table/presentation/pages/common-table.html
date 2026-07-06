@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-        @for ( item of recetnTrasacntionFilterServices.recentTransactionFilterQuery.data()?.items ; track $index) {
+        @for ( item of recetnTrasacntionFilterServices.currentItems() ; track item.id) {
         <tr class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
             <th scope="row" class="w-1/5 px-6 py-4 font-medium text-heading whitespace-nowrap">
                 <h3 class="text-lg font-bold">{{ item.title }}</h3>
@@ -71,36 +71,51 @@
                 </button>
             </td>
         </tr>
+        } @empty {
+        <tr class="bg-neutral-primary-soft border-b border-default">
+            <td colspan="6" class="px-6 py-8 text-center text-body">
+                @if (recetnTrasacntionFilterServices.recentTransactionFilterQuery.isLoading()) {
+                    Cargando gastos...
+                } @else {
+                    No hay gastos para mostrar
+                }
+            </td>
+        </tr>
         }
         </tbody>
     </table>
 
     <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-4" aria-label="Table navigation">
-        <span class="text-sm font-normal text-body mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-heading">1-10</span> of <span class="font-semibold text-heading">
-                {{ recetnTrasacntionFilterServices.recentTransactionFilterQuery.data()?.total }}
+        <span class="text-sm font-normal text-body mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando <span class="font-semibold text-heading">{{ recetnTrasacntionFilterServices.fromItemComputed() }}-{{ recetnTrasacntionFilterServices.toItemComputed() }}</span> de <span class="font-semibold text-heading">
+                {{ recetnTrasacntionFilterServices.totalComputed() }}
             </span>
+            <span class="ms-2 text-body">Cargados {{ recetnTrasacntionFilterServices.loadedItemsComputed() }}</span>
         </span>
         <ul class="flex -space-x-px text-sm">
             <li>
-                <a class="flex items-center cursor-pointer justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium rounded-s-base text-sm px-3 h-9 focus:outline-none">Previous</a>
+                <button
+                type="button"
+                (click)="recetnTrasacntionFilterServices.previousPage()"
+                [disabled]="!recetnTrasacntionFilterServices.canGoPrevious() || recetnTrasacntionFilterServices.recentTransactionFilterQuery.isFetching()"
+                class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading disabled:opacity-50 disabled:cursor-not-allowed font-medium rounded-s-base text-sm px-3 h-9 focus:outline-none">Anterior</button>
             </li>
             <li>
-                <a class="flex items-center cursor-pointer justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">1</a>
+                <span aria-current="page" class="flex items-center justify-center text-fg-brand bg-brand-softer box-border border border-default-medium font-medium text-sm px-3 h-9 focus:outline-none">
+                    Página {{ recetnTrasacntionFilterServices.currentPageComputed() }} de {{ recetnTrasacntionFilterServices.totalPagesComputed() }}
+                </span>
             </li>
             <li>
-                <a class="flex items-center cursor-pointer justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">2</a>
-            </li>
-            <li>
-                <a aria-current="page" class="flex items-center cursor-pointer justify-center text-fg-brand bg-brand-softer box-border border border-default-medium hover:bg-brand-soft hover:text-fg-brand font-medium text-sm w-9 h-9 focus:outline-none">3</a>
-            </li>
-            <li>
-                <a class="flex items-center cursor-pointer justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">...</a>
-            </li>
-            <li>
-                <a class="flex items-center cursor-pointer justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium text-sm w-9 h-9 focus:outline-none">5</a>
-            </li>
-            <li>
-                <a class="flex items-center cursor-pointer justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading font-medium rounded-e-base text-sm px-3 h-9 focus:outline-none">Next</a>
+                <button
+                type="button"
+                (click)="recetnTrasacntionFilterServices.nextPage()"
+                [disabled]="!recetnTrasacntionFilterServices.canGoNext() || recetnTrasacntionFilterServices.recentTransactionFilterQuery.isFetching()"
+                class="flex items-center justify-center text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading disabled:opacity-50 disabled:cursor-not-allowed font-medium rounded-e-base text-sm px-3 h-9 focus:outline-none">
+                    @if (recetnTrasacntionFilterServices.recentTransactionFilterQuery.isFetching()) {
+                        Cargando...
+                    } @else {
+                        Siguiente
+                    }
+                </button>
             </li>
         </ul>
     </nav>
