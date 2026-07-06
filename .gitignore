@@ -42,13 +42,3 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
-
-/src/enviroments
-
-# Local environment values
-.env
-.env.*
-!.env.example
-
-# Generated app config
-/src/app/core/config/base-url.generated.ts

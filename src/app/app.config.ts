@@ -5,8 +5,6 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular
 import { provideTanStackQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
 import { routes } from './app.routes';
-import { BASE_URL } from './core/config/app-config';
-import { BASE_URL_VALUE } from './core/config/base-url.generated';
 import { SignInRepository } from './features/auth/signIn/domain';
 import { authInterceptor } from './core/services/interceptor/http-token-interceptor';
 import { ErrorInterceptor } from './core/services/interceptor/http-error-interceptor';
@@ -23,7 +21,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(), 
     provideRouter( routes, withViewTransitions() ),
     provideHttpClient( withInterceptors([authInterceptor]), ),
-    { provide: BASE_URL, useValue: BASE_URL_VALUE },
     provideTanStackQuery( new QueryClient({
       defaultOptions: {
         queries: {
