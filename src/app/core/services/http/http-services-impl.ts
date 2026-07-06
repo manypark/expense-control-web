@@ -3,13 +3,12 @@ import { inject, Service } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 import { HttpAdapter } from "./http-services";
-import { environment } from "../../../../enviroments/environment";
+import { BASE_URL } from "../../config/app-config";
 
 @Service()
 export class HttpClientService implements HttpAdapter {
 
-    private readonly baseUrl = environment.apiUrl;
-
+    private readonly baseUrl = inject(BASE_URL);
     private readonly http = inject(HttpClient);
 
     get<T>(url: string, options?: object): Promise<T> {

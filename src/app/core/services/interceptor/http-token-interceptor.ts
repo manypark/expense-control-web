@@ -9,7 +9,7 @@ import {
 } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, filter, finalize, switchMap, take, throwError } from 'rxjs';
 
-import { environment } from '../../../../enviroments/environment';
+import { BASE_URL } from '../../config/app-config';
 
 interface RefreshTokenResponse {
   accessToken?: string;
@@ -23,6 +23,7 @@ const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const http = inject(HttpClient);
   const router = inject(Router);
+  const baseUrl = inject(BASE_URL);
   const token = localStorage.getItem('accesToken');
 
   const skipUrls = [ '/auth/login', '/auth/refresh' ];
@@ -32,7 +33,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   return next(authReq).pipe(
     catchError((error: unknown) => {
       if (error instanceof HttpErrorResponse && error.status === 401 && !isSkip) {
-        return handle401Error(authReq, next, http, router);
+        return handle401Error(authReq, next, http, router, baseUrl);
       }
 
       return throwError(() => error);
@@ -44,7 +45,8 @@ function handle401Error(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
   http: HttpClient,
-  router: Router
+  router: Router,
+  baseUrl: string
 ): Observable<HttpEvent<unknown>> {
   const refreshToken = localStorage.getItem('refreshToken');
 
@@ -64,7 +66,7 @@ function handle401Error(
   isRefreshingToken = true;
   refreshTokenSubject.next(null);
 
-  return http.post<RefreshTokenResponse>(`${environment.apiUrl}/auth/refresh`, { refreshToken }).pipe(
+  return http.post<RefreshTokenResponse>(`${baseUrl}/auth/refresh`, { refreshToken }).pipe(
     switchMap((response) => {
       const newAccessToken = response.accessToken ?? response.token;
 

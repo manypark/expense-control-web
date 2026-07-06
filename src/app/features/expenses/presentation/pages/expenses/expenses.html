@@ -1,14 +1,14 @@
-<main class="w-full min-h-screen bg-[#EBF0FF] px-4 pb-28 pt-6 sm:px-8 lg:px-10">
+<main class="w-full min-h-screen bg-[#EBF0FF] px-4 pb-28 pt-4 sm:px-8 sm:pt-6 lg:px-10">
 
-   <div class="mx-auto grid max-w-8xl mt-10 gap-20 mb-20">
-      <div class="w-full flex justify-between">
+   <div class="mx-auto grid max-w-8xl mt-6 gap-8 mb-10 lg:mt-10 lg:gap-20 lg:mb-20">
+      <div class="w-full flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
    
          <div>
-            <h2 class="text-3xl font-bold">Gastos</h2>
-            <p>Gestiona y analiza tus egresos mensuales</p>
+            <h2 class="text-2xl font-bold sm:text-3xl">Gastos</h2>
+            <p class="text-sm text-body sm:text-base">Gestiona y analiza tus egresos mensuales</p>
          </div>
 
-         <div class="w-60" (click)="showSidebar()">
+         <div class="w-full sm:w-60" (click)="showSidebar()">
             <app-common-button
             type="submit"
             text="+ Registrar Gastos"
@@ -19,15 +19,15 @@
    
       </div>
 
-      <div class="flex justify-between">
+      <div class="grid gap-5 xl:grid-cols-[18rem_1fr] xl:items-stretch">
 
-         <div class="grid rounded-2xl bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 w-3xs p-10 gap-y-2 shadow-[#3B69FF] shadow-lg">
-            <h2 class="text-white text-3xl">Total Mes</h2>
+         <div class="grid rounded-lg bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 p-6 gap-y-2 shadow-[#3B69FF] shadow-lg sm:p-8 lg:p-10">
+            <h2 class="text-white text-2xl sm:text-3xl">Total Mes</h2>
             <p class="text-white text-2xl"> $ 6,768.69 </p>
          </div>
 
-         <div class="p-8 px-12 rounded-2xl w-4/5 border-2 border-white bg-gray-100 shadow-md sm:p-7">
-            <div class="flex justify-between">
+         <div class="p-4 rounded-lg border-2 border-white bg-gray-100 shadow-md sm:p-7 lg:px-12">
+            <div class="grid gap-5 lg:grid-cols-[minmax(12rem,18rem)_1fr_13rem] lg:items-end">
 
                <app-common-select
                   id="category"
@@ -40,15 +40,15 @@
                </app-common-select>
 
                <div class="grid gap-y-4">
-                  <h3 class="text-2xl"> Rango de fechas </h3>
-                  <div id="date-range-picker" date-rangepicker class="flex items-center">
+                  <h3 class="text-xl sm:text-2xl"> Rango de fechas </h3>
+                  <div id="date-range-picker" date-rangepicker class="grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
                   <div class="relative">
                      <div class="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none">
                         <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"/></svg>
                      </div>
                      <input id="datepicker-range-start" name="start" type="text" class="block w-full ps-9 pe-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 shadow-xs placeholder:text-body" placeholder="Fecha inicial">
                   </div>
-                  <span class="mx-4 text-body">to</span>
+                  <span class="hidden text-body sm:block">a</span>
                   <div class="relative">
                      <div class="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none">
                         <svg class="w-4 h-4 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"/></svg>
@@ -58,9 +58,9 @@
                   </div>
                </div>
 
-               <div class="flex justify-center items-center">
+               <div class="flex items-end">
                   <app-common-button
-                  class="w-52"
+                  class="w-full"
                   type="submit"
                   text="Filtrar"
                   loadingText="Cargando..."
@@ -77,7 +77,7 @@
 
 <!-- drawer component -->
 @if (isExpenseDrawerOpen()) {
-<div id="drawer-navigation" class="fixed top-0 left-0 z-40 w-96 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-neutral-primary-soft border-e border-default" tabindex="-1" aria-labelledby="drawer-navigation-label">
+<div id="drawer-navigation" class="fixed top-0 left-0 z-40 h-screen w-full max-w-sm p-4 overflow-y-auto transition-transform -translate-x-full bg-neutral-primary-soft border-e border-default sm:w-96" tabindex="-1" aria-labelledby="drawer-navigation-label">
   <div class="border-b border-default pb-4 flex items-center">
       <p class="text-2xl font-bold"> {{ expensesService.isEditing() ? 'Editar gasto' : 'Guardar gasto' }} </p>
       <button (click)="closeSidebar()" type="button" aria-controls="drawer-navigation" class="text-body bg-transparent hover:text-heading hover:bg-neutral-tertiary rounded-base w-9 h-9 absolute top-2.5 inset-e-2.5 flex items-center justify-center">
