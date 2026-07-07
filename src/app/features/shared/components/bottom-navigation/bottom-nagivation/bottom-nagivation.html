@@ -1,133 +1,55 @@
-<router-outlet></router-outlet>
+<nav class="sticky top-0 z-50 w-full border-b border-default bg-gray-100 shadow-sm">
+    <div class="mx-auto flex max-w-8xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-8 lg:px-10">
+        <a [routerLink]="['/home/dashboard']" (click)="closeMenu()" class="flex items-center gap-3">
+            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-lg font-bold text-white shadow-md shadow-blue-500/30">
+                CG
+            </span>
+            <span class="text-xl font-bold text-heading">Control Gastos</span>
+        </a>
 
-<div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 h-16 w-full px-2 lg:max-w-4xl bg-gray-100 border-2 border-white backdrop-blur-lg rounded-2xl">
+        <button
+            type="button"
+            (click)="toggleMenu()"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-default-medium text-body hover:bg-neutral-tertiary-medium hover:text-heading focus:outline-none focus:ring-2 focus:ring-brand md:hidden"
+            aria-controls="navbar-sticky"
+            [attr.aria-expanded]="isMenuOpen()">
+            <span class="sr-only">Abrir menú principal</span>
+            <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+            </svg>
+        </button>
 
-    <div class="relative h-full">
-
-        <!-- Indicador deslizante -->
-        <div class="absolute top-1 bottom-1 w-1/5 bg-white rounded-2xl shadow-lg transition-all duration-300 ease-out" [style.transform]="'translateX(' + (selectedIndex * 100) + '%)'"></div>
-
-        <!-- Botones -->
-        <div class="grid h-full grid-cols-5 mx-auto font-medium relative z-10">
-
-            <!-- Inicio -->
-            <button [routerLink]="['/home/dashboard']" type="button" class="inline-flex flex-col items-center justify-center rounded-2xl transition-all duration-300">
-
-                <svg
-                    class="w-6 h-6 mb-1 transition-all duration-300"
-                    [class.scale-110]="selectedIndex === 0"
-                    [class.-translate-y-1]="selectedIndex === 0"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5" />
-                </svg>
-
-                <span class="text-sm transition-all duration-300" [class.font-bold]="selectedIndex === 0">
-                    Inicio
-                </span>
-
-            </button>
-
-            <!-- Gastos -->
-            <button [routerLink]="['/home/expenses']" type="button" class="inline-flex flex-col items-center justify-center px-5 rounded-2xl transition-all duration-300">
-
-                <svg
-                    class="w-6 h-6 mb-1 transition-all duration-300"
-                    [class.scale-110]="selectedIndex === 1"
-                    [class.-translate-y-1]="selectedIndex === 1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M17 8H5m12 0a1 1 0 0 1 1 1v2.6M17 8l-4-4M5 8a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.6M5 8l4-4 4 4m6 4h-4a2 2 0 1 0 0 4h4a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1Z" />
-                </svg>
-
-                <span class="text-sm transition-all duration-300" [class.font-bold]="selectedIndex === 1">
-                    Gastos
-                </span>
-
-            </button>
-
-            <!-- Servicios -->
-            <button [routerLink]="['/home/services']" type="button" class="inline-flex flex-col items-center justify-center px-5 rounded-2xl transition-all duration-300">
-
-                <svg
-                    class="w-6 h-6 mb-1 transition-all duration-300"
-                    [class.scale-110]="selectedIndex === 2"
-                    [class.-translate-y-1]="selectedIndex === 2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 5h6m-6 4h6M10 3v4h4V3h-4Z" />
-                </svg>
-
-                <span class="text-sm transition-all duration-300" [class.font-bold]="selectedIndex === 2">
-                    Servicios
-                </span>
-
-            </button>
-
-            <!-- Analítica -->
-            <button [routerLink]="['/home/analitycs']" type="button" class="inline-flex flex-col items-center justify-center px-5 rounded-2xl transition-all duration-300">
-
-                <svg
-                    class="w-6 h-6 mb-1 transition-all duration-300"
-                    [class.scale-110]="selectedIndex === 3"
-                    [class.-translate-y-1]="selectedIndex === 3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5" />
-                </svg>
-
-                <span class="text-sm transition-all duration-300" [class.font-bold]="selectedIndex === 3">
-                    Analítica
-                </span>
-
-            </button>
-
-            <!-- Tarjetas -->
-            <button [routerLink]="['/home/cards']" type="button" class="inline-flex flex-col items-center justify-center px-5 rounded-2xl transition-all duration-300">
-
-                <svg
-                    class="w-6 h-6 mb-1 transition-all duration-300"
-                    [class.scale-110]="selectedIndex === 4"
-                    [class.-translate-y-1]="selectedIndex === 4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24">
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z" />
-                </svg>
-
-                <span class="text-sm transition-all duration-300" [class.font-bold]="selectedIndex === 4">
-                    Tarjetas
-                </span>
-            </button>
+        <div id="navbar-sticky" class="w-full md:block md:w-auto" [class.hidden]="!isMenuOpen()">
+            <ul class="mt-4 flex flex-col gap-2 rounded-lg border border-default bg-neutral-primary-soft p-3 font-medium md:mt-0 md:flex-row md:items-center md:border-0 md:bg-transparent md:p-0">
+                @for (item of navItems; track item.route; let index = $index) {
+                    <li>
+                        <a
+                            [routerLink]="[item.route]"
+                            (click)="closeMenu()"
+                            class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-neutral-tertiary-medium hover:text-heading md:hover:bg-white"
+                            [class.bg-white]="selectedIndex === index"
+                            [class.text-blue-700]="selectedIndex === index"
+                            [class.font-bold]="selectedIndex === index"
+                            [class.text-body]="selectedIndex !== index">
+                            <svg
+                                class="h-5 w-5 shrink-0"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24">
+                                <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    [attr.d]="item.icon" />
+                            </svg>
+                            <span>{{ item.label }}</span>
+                        </a>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
-</div>
+</nav>
+
+<router-outlet></router-outlet>

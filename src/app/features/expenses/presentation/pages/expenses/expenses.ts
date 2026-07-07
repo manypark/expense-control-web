@@ -96,6 +96,7 @@ export default class Expenses implements AfterViewInit {
 
   showSidebar() {
     this.expensesService.resetForm();
+    this.expensesService.setTodayDate();
     this.openExpenseDrawer();
   }
 
@@ -132,9 +133,19 @@ export default class Expenses implements AfterViewInit {
 
     this.drawer = new Drawer(target);
 
-    this.pickerExpense = new Datepicker(elementDatePicker, {
+    const datepickerOptions = {
       autohide: true,
-      format: 'dd/mm/yyyy'
+      format: 'dd/mm/yyyy',
+      todayBtn: true,
+      todayBtnMode: 1,
+      todayHighlight: true,
+    };
+
+    this.pickerExpense = new Datepicker(elementDatePicker, datepickerOptions);
+    this.pickerExpense.setDate(this.expensesService.expenseForm.date().value());
+
+    document.querySelectorAll<HTMLButtonElement>('.today-btn').forEach((button) => {
+      button.textContent = 'Hoy';
     });
 
     elementDatePicker.addEventListener('changeDate', () => {

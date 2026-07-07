@@ -113,6 +113,10 @@ export class ExpensesService {
         this.expenseModel.update((value) => ({ ...value, cardId }));
     }
 
+    setTodayDate() {
+        this.setDate(this.formatDateToInput(new Date()));
+    }
+
     setExpenseToEdit(expense: RecentTransactionEntity) {
         const formValue: ExpenseFormModel = {
             title      : expense.title,
