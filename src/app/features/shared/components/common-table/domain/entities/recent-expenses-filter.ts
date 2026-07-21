@@ -10,8 +10,9 @@ export interface RecentExpensesFilterEntity {
 }
 
 export interface RecentExpensesFilterParamsEntity {
-    limit:   number;
-    offset:  number;
-    from?:   string | null;
-    to?:     string | null;
+    limit:    number;
+    offset:   number;
+    from?:    string | null;
+    to?:      string | null;
+    category?: string | null;
 }

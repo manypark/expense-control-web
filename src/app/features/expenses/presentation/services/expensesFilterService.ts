@@ -9,6 +9,7 @@ export class ExpensesFilterService {
 
     readonly startDate = signal('');
     readonly endDate = signal('');
+    readonly category = signal('');
 
     setStartDate(date: string) {
         this.startDate.set(date);
@@ -18,10 +19,15 @@ export class ExpensesFilterService {
         this.endDate.set(date);
     }
 
-    applyDateFilter() {
-        this.recentTransactionsFilterServices.applyDateFilter(
+    setCategory(category: string) {
+        this.category.set(category);
+    }
+
+    applyFilter() {
+        this.recentTransactionsFilterServices.applyFilter(
             this.formatDateToApi(this.startDate()),
             this.formatDateToApi(this.endDate()),
+            this.category() || null,
         );
     }
 

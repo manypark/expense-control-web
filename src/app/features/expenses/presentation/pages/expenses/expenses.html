@@ -35,6 +35,7 @@
                   title="Categorías"
                   classTitle="text-2xl"
                   placeholder="Selecciona una categoría"
+                  [value]="expensesFilterService.category()"
                   [options]="categories"
                   (valueChange)="onCategoryChange($event)">
                </app-common-select>
@@ -58,7 +59,7 @@
                   </div>
                </div>
 
-               <div class="flex items-end" (click)="expensesFilterService.applyDateFilter()">
+               <div class="flex items-end" (click)="expensesFilterService.applyFilter()">
                   <app-common-button
                   class="w-full"
                   type="button"
@@ -76,10 +77,10 @@
    <app-common-table (editExpense)="onEditExpense($event)" (deleteExpense)="onDeleteExpense($event)"></app-common-table>
 
    @if (expenseToDelete()) {
-      <div id="delete-expense-modal" tabindex="-1" class="hidden fixed top-0 right-0 left-0 z-[80] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full overflow-y-auto overflow-x-hidden">
+      <div id="delete-expense-modal" tabindex="-1" class="hidden fixed top-0 right-0 left-0 z-80 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full overflow-y-auto overflow-x-hidden">
          <div class="relative w-full max-w-md max-h-full p-4">
             <div class="relative rounded-lg bg-neutral-primary-soft shadow-sm">
-               <button (click)="closeDeleteExpenseModal()" type="button" class="absolute top-3 end-2.5 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-body hover:bg-neutral-tertiary hover:text-heading">
+               <button (click)="closeDeleteExpenseModal()" type="button" class="absolute top-3 inset-e-2.5 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-body hover:bg-neutral-tertiary hover:text-heading">
                   <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                   </svg>
@@ -114,7 +115,7 @@
 
 <!-- drawer component -->
    @if (isExpenseDrawerOpen()) {
-      <div id="drawer-navigation" class="fixed top-0 left-0 z-[70] h-screen w-full max-w-sm p-4 overflow-y-auto transition-transform -translate-x-full bg-neutral-primary-soft border-e border-default sm:w-96" tabindex="-1" aria-labelledby="drawer-navigation-label">
+      <div id="drawer-navigation" class="fixed top-0 left-0 z-70 h-screen w-full max-w-sm p-4 overflow-y-auto transition-transform -translate-x-full bg-neutral-primary-soft border-e border-default sm:w-96" tabindex="-1" aria-labelledby="drawer-navigation-label">
       <div class="border-b border-default pb-4 flex items-center">
             <p class="text-2xl font-bold"> {{ expensesService.isEditing() ? 'Editar gasto' : 'Guardar gasto' }} </p>
             <button (click)="closeSidebar()" type="button" aria-controls="drawer-navigation" class="text-body bg-transparent hover:text-heading hover:bg-neutral-tertiary rounded-base w-9 h-9 absolute top-2.5 inset-e-2.5 flex items-center justify-center">

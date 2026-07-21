@@ -1,10 +1,11 @@
 import { RecentExpensesFilterParamsEntity } from "../../domain";
 
 export interface RecentExpensesFilterRequestDto {
-    limit:   number;
-    offset:  number;
-    from?:   string | null;
-    to?:     string | null;
+    limit:    number;
+    offset:   number;
+    from?:    string | null;
+    to?:      string | null;
+    category?: string | null;
 }
 
 export function toRecentExpensesFilterRequestDto(params: RecentExpensesFilterParamsEntity): RecentExpensesFilterRequestDto {
@@ -13,5 +14,6 @@ export function toRecentExpensesFilterRequestDto(params: RecentExpensesFilterPar
         offset: params.offset,
         from  : params.from,
         to    : params.to,
+        category: params.category,
     };
 }

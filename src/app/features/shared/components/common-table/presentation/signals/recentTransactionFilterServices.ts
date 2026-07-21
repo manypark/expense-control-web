@@ -15,6 +15,7 @@ export class RecentTransactionsFilterServices {
     private readonly totalAmountFromApi = signal<number | null>(null);
     private readonly from = signal<string | null>(null);
     private readonly to = signal<string | null>(null);
+    private readonly category = signal<string | null>(null);
     private readonly recentTransactionFilterUsecase = inject( RecentTransactionFilterUsecase );
 
     readonly offsetComputed = computed( () => this.currentPage() * this.limit() );
@@ -22,6 +23,7 @@ export class RecentTransactionsFilterServices {
     readonly totalComputed = computed( () => this.totalItems() );
     readonly fromComputed = computed( () => this.from() );
     readonly toComputed = computed( () => this.to() );
+    readonly categoryComputed = computed( () => this.category() );
     readonly totalPagesComputed = computed( () => Math.max(Math.ceil(this.totalItems() / this.limit()), 1) );
     readonly currentItems = computed( () => {
         return this.loadedPages()[this.currentPage()] ?? this.recentTransactionFilterQuery.data()?.items ?? [];
@@ -51,7 +53,7 @@ export class RecentTransactionsFilterServices {
     readonly canGoNext = computed( () => this.toItemComputed() < this.totalItems() );
 
     public recentTransactionFilterQuery = injectQuery(() => ({
-        queryKey: ['get-recent-filter-transaction', this.limit(), this.offsetComputed(), this.from(), this.to()],
+        queryKey: ['get-recent-filter-transaction', this.limit(), this.offsetComputed(), this.from(), this.to(), this.category()],
         queryFn : async () => {
             const cachedItems = this.loadedPages()[this.currentPage()];
 
@@ -64,6 +66,7 @@ export class RecentTransactionsFilterServices {
                 offset: this.offsetComputed(),
                 from  : this.from(),
                 to    : this.to(),
+                category: this.category(),
             });
 
             this.totalItems.set(response.total);
@@ -91,9 +94,10 @@ export class RecentTransactionsFilterServices {
         this.currentPage.set(Math.floor(offset / this.limit()));
     }
 
-    public applyDateFilter(from: string | null, to: string | null) {
+    public applyFilter(from: string | null, to: string | null, category: string | null) {
         this.from.set(from);
         this.to.set(to);
+        this.category.set(category);
         this.resetPagination();
     }
 

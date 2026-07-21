@@ -207,8 +207,8 @@ export default class Expenses implements AfterViewInit {
     });
   }
 
-  onCategoryChange( emit:any ) {
-    console.log(emit);
+  onCategoryChange( category:string ) {
+    this.expensesFilterService.setCategory(category);
   }
 
   onCategoryChangeInput( category:string ) {

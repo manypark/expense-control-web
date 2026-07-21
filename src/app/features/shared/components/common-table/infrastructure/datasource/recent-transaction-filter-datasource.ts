@@ -25,6 +25,10 @@ export class RecentTransactionFilterDatasourceImpl {
                 queryParams.set('to', request.to);
             }
 
+            if (request.category) {
+                queryParams.set('category', request.category);
+            }
+
             const res:any = await this.httpClient.get( `/expenses?${queryParams.toString()}` );
             return res;
         } catch (error : any) {
