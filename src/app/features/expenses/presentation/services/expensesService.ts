@@ -5,7 +5,8 @@ import { toast } from 'ngx-sonner';
 import { injectMutation, injectQueryClient } from "@tanstack/angular-query-experimental";
 
 import { RecentTransactionEntity } from '../../../shared/entities';
-import { CreateExpenseEntity, CreateExpenseUsecase, UpdateExpenseUsecase } from '../../domain';
+import { RecentTransactionsFilterServices } from '../../../shared/components/common-table/presentation/signals';
+import { CreateExpenseEntity, CreateExpenseUsecase, DeleteExpenseUsecase, UpdateExpenseUsecase } from '../../domain';
 
 type ExpenseFormModel = {
     title:       string;
@@ -22,6 +23,8 @@ export class ExpensesService {
     private readonly queryClient = injectQueryClient();
     private readonly createExpenseUsecase = inject( CreateExpenseUsecase );
     private readonly updateExpenseUsecase = inject( UpdateExpenseUsecase );
+    private readonly deleteExpenseUsecase = inject( DeleteExpenseUsecase );
+    private readonly recentTransactionsFilterServices = inject( RecentTransactionsFilterServices );
     onExpenseCreated?: () => void;
     private editingExpenseId = signal<string | null>(null);
     private originalExpensePayload = signal<Partial<CreateExpenseEntity> | null>(null);
@@ -43,7 +46,7 @@ export class ExpensesService {
             toast.success('Gasto guardado correctamente');
             this.resetForm();
             this.onExpenseCreated?.();
-            this.queryClient.invalidateQueries({ queryKey: ['get-recent-filter-transaction'] });
+            this.refreshExpensesList();
         },
         onError   : (error) => { toast.error( error.message ); },
     }));
@@ -56,7 +59,16 @@ export class ExpensesService {
             toast.success('Gasto actualizado correctamente');
             this.resetForm();
             this.onExpenseCreated?.();
-            this.queryClient.invalidateQueries({ queryKey: ['get-recent-filter-transaction'] });
+            this.refreshExpensesList();
+        },
+        onError   : (error) => { toast.error( error.message ); },
+    }));
+
+    readonly deleteExpenseMutation = injectMutation( () => ({
+        mutationFn: (expenseId: string) => this.deleteExpenseUsecase.execute(expenseId),
+        onSuccess : () => {
+            toast.success('Gasto eliminado correctamente');
+            this.refreshExpensesList();
         },
         onError   : (error) => { toast.error( error.message ); },
     }));
@@ -150,6 +162,10 @@ export class ExpensesService {
         return this.editingExpenseId() !== null;
     }
 
+    deleteExpense(expenseId: string) {
+        this.deleteExpenseMutation.mutate(expenseId);
+    }
+
     private buildExpensePayload(value: ExpenseFormModel): CreateExpenseEntity {
         const [day, month, year] = this.getDateParts(value.date);
         const incurredAt = this.parseDateToIso(value.date);
@@ -181,6 +197,11 @@ export class ExpensesService {
         }
 
         return changedPayload;
+    }
+
+    private refreshExpensesList() {
+        this.recentTransactionsFilterServices.resetPagination();
+        this.queryClient.invalidateQueries({ queryKey: ['get-recent-filter-transaction'] });
     }
 
     private parseDateToIso(date: string): string {

@@ -1,5 +1,5 @@
-import { RecentExpensesFilterEntity } from "../entities/recent-expenses-filter";
+import { RecentExpensesFilterEntity, RecentExpensesFilterParamsEntity } from "../entities/recent-expenses-filter";
 
 export abstract class RecentTransactionFilterRepository {
-    abstract getRecentTransactionByFilter( limit:number, offset:number ):Promise<RecentExpensesFilterEntity>;
+    abstract getRecentTransactionByFilter(params: RecentExpensesFilterParamsEntity): Promise<RecentExpensesFilterEntity>;
 }

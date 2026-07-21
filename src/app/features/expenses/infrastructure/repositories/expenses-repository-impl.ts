@@ -15,4 +15,8 @@ export class ExpensesRepositoryImpl implements ExpensesRepository {
     updateExpense(expenseId: string, expense: Partial<CreateExpenseEntity>): Promise<ExpenseEntity> {
         return this.expensesDatasource.updateExpense(expenseId, expense);
     }
+
+    deleteExpense(expenseId: string): Promise<void> {
+        return this.expensesDatasource.deleteExpense(expenseId);
+    }
 }

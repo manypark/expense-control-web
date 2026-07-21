@@ -1,32 +1,39 @@
 import { AfterViewInit, Component, NgZone, computed, inject, signal } from '@angular/core';
 import { FormRoot } from '@angular/forms/signals';
+import { DecimalPipe } from '@angular/common';
 
-import { Datepicker, Drawer } from 'flowbite';
+import { Datepicker, Drawer, Modal } from 'flowbite';
 import { DateRangePicker } from 'flowbite-datepicker';
 
+import { ExpensesService } from '../../services/expensesService';
+import { ExpensesFilterService } from '../../services/expensesFilterService';
+import { RecentTransactionEntity } from '../../../../shared/entities';
+import { CardsServices } from '../../../../dashboard/presentation/signals';
+import { RecentTransactionsFilterServices } from '../../../../shared/components/common-table/presentation/signals';
 import { CommonButton, CommonInput, CommonSelect } from "../../../../shared/components/inputs";
 import { CommonTable } from "../../../../shared/components/common-table/presentation/pages/common-table";
-import { CardsServices } from '../../../../dashboard/presentation/signals';
-import { ExpensesService } from '../../services/expensesService';
-import { RecentTransactionEntity } from '../../../../shared/entities';
 
 @Component({
   selector    : 'app-expenses',
   templateUrl : './expenses.html',
   styleUrl    : './expenses.css',
-  imports: [FormRoot, CommonButton, CommonTable, CommonInput, CommonSelect],
+  imports     : [DecimalPipe, FormRoot, CommonButton, CommonTable, CommonInput, CommonSelect],
 })
 
 export default class Expenses implements AfterViewInit {
 
-   readonly expensesService = inject( ExpensesService );
-   readonly cardsServices = inject( CardsServices );
-   private readonly ngZone = inject( NgZone );
+  private readonly ngZone = inject( NgZone );
+  readonly cardsServices = inject( CardsServices );
+  readonly expensesService = inject( ExpensesService );
+  readonly expensesFilterService = inject( ExpensesFilterService );
+  readonly recentTransactionsFilterServices = inject( RecentTransactionsFilterServices );
 
-   private picker?: DateRangePicker;
-   private pickerExpense?: Datepicker;
-   private drawer?: Drawer;
-   isExpenseDrawerOpen = signal(false);
+  private drawer?: Drawer;
+  private deleteExpenseModal?: Modal;
+  private picker?: DateRangePicker;
+  private pickerExpense?: Datepicker;
+  isExpenseDrawerOpen = signal(false);
+  expenseToDelete = signal<RecentTransactionEntity | null>(null);
 
    constructor() {
     this.expensesService.onExpenseCreated = () => this.closeSidebar(false);
@@ -84,14 +91,22 @@ export default class Expenses implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const element = document.getElementById('date-range-picker');
+    const startInput = document.getElementById('datepicker-range-start') as HTMLInputElement | null;
+    const endInput = document.getElementById('datepicker-range-end') as HTMLInputElement | null;
 
-    if (!element) { return; }
+    if (!element || !startInput || !endInput) { return; }
+
+    startInput.value = this.expensesFilterService.startDate();
+    endInput.value = this.expensesFilterService.endDate();
 
     this.picker = new DateRangePicker(element, {
       autohide: true,
-      format: 'dd/mm/yyyy'
+      format: 'dd/mm/yyyy',
+      todayHighlight: true,
     });
 
+    this.listenDateRangeInput(startInput, (date) => this.expensesFilterService.setStartDate(date));
+    this.listenDateRangeInput(endInput, (date) => this.expensesFilterService.setEndDate(date));
   }
 
   showSidebar() {
@@ -103,6 +118,30 @@ export default class Expenses implements AfterViewInit {
   onEditExpense(expense: RecentTransactionEntity) {
     this.expensesService.setExpenseToEdit(expense);
     this.openExpenseDrawer();
+  }
+
+  onDeleteExpense(expense: RecentTransactionEntity) {
+    this.expenseToDelete.set(expense);
+
+    setTimeout(() => {
+      this.initializeDeleteExpenseModal();
+      this.deleteExpenseModal?.show();
+    });
+  }
+
+  closeDeleteExpenseModal() {
+    this.deleteExpenseModal?.hide();
+    this.deleteExpenseModal = undefined;
+    this.expenseToDelete.set(null);
+  }
+
+  confirmDeleteExpense() {
+    const expense = this.expenseToDelete();
+
+    if (!expense) { return; }
+
+    this.expensesService.deleteExpense(expense.id);
+    this.closeDeleteExpenseModal();
   }
 
   private openExpenseDrawer() {
@@ -155,6 +194,19 @@ export default class Expenses implements AfterViewInit {
     });
   }
 
+  private initializeDeleteExpenseModal() {
+    const target = document.getElementById('delete-expense-modal');
+
+    if (!target) { return; }
+
+    this.deleteExpenseModal = new Modal(target, {
+      placement: 'center',
+      backdrop: 'dynamic',
+      backdropClasses: 'bg-gray-900/50 fixed inset-0 z-[75]',
+      closable: true,
+    });
+  }
+
   onCategoryChange( emit:any ) {
     console.log(emit);
   }
@@ -172,4 +224,13 @@ export default class Expenses implements AfterViewInit {
     this.expensesService.setDate(date);
   }
 
+  private listenDateRangeInput(input: HTMLInputElement, setDate: (date: string) => void) {
+    const updateDate = () => {
+      this.ngZone.run(() => setDate(input.value));
+    };
+
+    input.addEventListener('input', updateDate);
+    input.addEventListener('change', updateDate);
+    input.addEventListener('changeDate', updateDate);
+  }
 }

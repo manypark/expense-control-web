@@ -1,14 +1,14 @@
 import { inject, Service } from "@angular/core";
 
 import { RecentTransactionFilterDatasourceImpl } from "../datasource";
-import { RecentExpensesFilterEntity, RecentTransactionFilterRepository } from "../../domain";
+import { RecentExpensesFilterEntity, RecentExpensesFilterParamsEntity, RecentTransactionFilterRepository } from "../../domain";
 
 @Service()
 export class RecentTransacionFilterRepositoryImpl implements RecentTransactionFilterRepository {
 
     private recentTransactionFilterDatasource = inject( RecentTransactionFilterDatasourceImpl );
 
-    getRecentTransactionByFilter(limit: number, offset: number): Promise<RecentExpensesFilterEntity> {
-        return this.recentTransactionFilterDatasource.getExpensesFilter( limit, offset );
+    getRecentTransactionByFilter(params: RecentExpensesFilterParamsEntity): Promise<RecentExpensesFilterEntity> {
+        return this.recentTransactionFilterDatasource.getExpensesFilter( params );
     }
 }

@@ -23,4 +23,12 @@ export class ExpensesDatasourceImpl {
             throw new Error( error?.error?.message ?? 'Unexpected error' );
         }
     }
+
+    async deleteExpense(expenseId: string) : Promise<void> {
+        try {
+            await this.httpClient.delete( `/expenses/${expenseId}` );
+        } catch (error : any) {
+            throw new Error( error?.error?.message ?? 'Unexpected error' );
+        }
+    }
 }
