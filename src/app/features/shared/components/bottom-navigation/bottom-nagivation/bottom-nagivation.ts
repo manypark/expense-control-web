@@ -1,6 +1,8 @@
 import { filter } from 'rxjs';
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from "@angular/router";
+
+import { BreakpointObserverServices } from '../../../services/breakpointObserver';
 
 @Component({
   selector    : 'app-bottom-nagivation',
@@ -13,8 +15,9 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from "@angular/router
 })
 
 export default class BottomNagivation {
+  
   selectedIndex = 0;
-  isMenuOpen = signal(false);
+  breakpointObsServices = inject(BreakpointObserverServices);
 
   navItems = [
     {
@@ -45,7 +48,10 @@ export default class BottomNagivation {
   ];
 
   constructor(private router: Router) {
+    this.naivgationObserver();
+  }
 
+  naivgationObserver() {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -63,16 +69,10 @@ export default class BottomNagivation {
         } else if (url.includes('cards')) {
           this.selectedIndex = 4;
         }
-
-        this.isMenuOpen.set(false);
-      });
+    });
   }
 
   toggleMenu() {
-    this.isMenuOpen.update((isOpen) => !isOpen);
-  }
-
-  closeMenu() {
-    this.isMenuOpen.set(false);
+    this.breakpointObsServices.toggleValueBreakpoint();
   }
 }

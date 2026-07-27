@@ -3,6 +3,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 
 import { RecentTransactionsFilterServices } from '../signals';
 import { RecentTransactionEntity } from '../../../../entities';
+import { BreakpointObserverServices } from '../../../../services/breakpointObserver';
 
 @Component({
   selector    : 'app-common-table',
@@ -18,6 +19,7 @@ export class CommonTable {
   readonly recetnTrasacntionFilterServices = inject(RecentTransactionsFilterServices);
   editExpense = output<RecentTransactionEntity>();
   deleteExpense = output<RecentTransactionEntity>();
+  breakpointObsServices = inject(BreakpointObserverServices);
 
   onEditExpense(expense: RecentTransactionEntity) {
     this.editExpense.emit(expense);
