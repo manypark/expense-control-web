@@ -36,12 +36,7 @@ export default class BottomNagivation {
       icon: 'M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 5h6m-6 4h6M10 3v4h4V3h-4Z'
     },
     {
-      label: 'Analítica',
-      route: '/home/analitycs',
-      icon: 'M3 15v4m6-6v6m6-4v4m6-6v6M3 11l6-5 6 5 5.5-5.5'
-    },
-    {
-      label: 'Tarjetas',
+      label: 'Cuentas y Tarjetas',
       route: '/home/cards',
       icon: 'M3 10h18M6 14h2m3 0h5M3 7v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z'
     },
@@ -64,10 +59,8 @@ export default class BottomNagivation {
           this.selectedIndex = 1;
         } else if (url.includes('services')) {
           this.selectedIndex = 2;
-        } else if (url.includes('analitycs')) {
-          this.selectedIndex = 3;
         } else if (url.includes('cards')) {
-          this.selectedIndex = 4;
+          this.selectedIndex = 3;
         }
     });
   }

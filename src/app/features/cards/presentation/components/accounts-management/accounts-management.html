@@ -1,0 +1,56 @@
+<section aria-labelledby="accounts-title" class="rounded-2xl border border-default bg-gray-100 p-4 sm:p-6 lg:p-7">
+    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-3">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-blue-700">
+                <svg class="h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16v10H4V7Zm3 3h.01M7 14h5"/>
+                </svg>
+            </span>
+            <h2 id="accounts-title" class="text-2xl font-bold text-heading">Gestión de Cuentas</h2>
+        </div>
+
+        <div class="w-full sm:w-48">
+            <app-common-button
+                type="button"
+                text="+ Añadir Cuenta"
+                loadingText="Cargando..."
+                [loading]="false"
+                [disabled]="false" />
+        </div>
+    </div>
+
+    <div class="grid gap-5">
+        @for (account of this.accountServices.accountsQuery.data(); track account.id) {
+            <article class="grid gap-4 rounded-2xl bg-white p-5 sm:grid-cols-[auto_1fr_auto_auto] sm:items-center sm:gap-6 lg:p-6">
+                <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M5 10v9h14v-9M7 6l5-3 5 3M7 14h.01M11 14h.01M15 14h.01"/>
+                    </svg>
+                </span>
+
+                <div class="min-w-0">
+                    <h3 class="truncate text-lg font-bold text-heading">{{ account.name }}</h3>
+                    <p class="mt-1 text-sm font-bold tracking-wide text-body">{{ account.code }}</p>
+                </div>
+
+                <dl class="grid gap-1 sm:text-right">
+                    <dt class="text-xs font-bold uppercase text-body">Balance</dt>
+                    <dd class="text-2xl font-bold text-heading"> $ {{ account.balance | number:'1.2-2' }}</dd>
+                </dl>
+
+                <div class="flex items-center gap-4 sm:justify-end">
+                    <button type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-blue-700 hover:bg-blue-50" aria-label="Editar cuenta">
+                        <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-red-600 hover:bg-red-50" aria-label="Eliminar cuenta">
+                        <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                        </svg>
+                    </button>
+                </div>
+            </article>
+        }
+    </div>
+</section>
