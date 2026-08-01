@@ -8,15 +8,17 @@ import { routes } from './app.routes';
 import { SignInRepository } from './features/auth/signIn/domain';
 import { authInterceptor } from './core/services/interceptor/http-token-interceptor';
 import { ErrorInterceptor } from './core/services/interceptor/http-error-interceptor';
+import { ExpensesRepository } from './features/expenses/domain';
+import { ExpensesRepositoryImpl } from './features/expenses/infrastructure/repositories';
+import { BillsRepository } from './features/bills/domain';
+import { BillsRepositoryImpl } from './features/bills/infrastructure/repositories';
+import { CreateAccountRepository } from './features/cards/domain/repositories';
+import { CreateAccountRepositoryImpl } from './features/cards/infrastructure/repositories';
 import { SignInRepositoryImpl } from './features/auth/signIn/infrastructure/repositories/sign-in-repository';
 import { RecentTransactionFilterRepository } from './features/shared/components/common-table/domain/repositories';
 import { RecentTransacionFilterRepositoryImpl } from './features/shared/components/common-table/infrastructure/repositories';
 import { AccountsRepository, CardsRepository, ExpenseMonthlyRepository, RecentTransactionRepository } from './features/dashboard/domain/repositories';
 import { AccountsRepositoryImpl, CardsRepositoryImpl, ExpenseMonthlyRepositoryImpl, RecentTransacionRepositoryImpl } from './features/dashboard/infrastructure/repositories';
-import { ExpensesRepository } from './features/expenses/domain';
-import { ExpensesRepositoryImpl } from './features/expenses/infrastructure/repositories';
-import { BillsRepository } from './features/bills/domain';
-import { BillsRepositoryImpl } from './features/bills/infrastructure/repositories';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,11 +33,12 @@ export const appConfig: ApplicationConfig = {
         },
       }
     }) ),
+    { provide: BillsRepository, useClass: BillsRepositoryImpl },
     { provide: CardsRepository, useClass: CardsRepositoryImpl },
     { provide: SignInRepository, useClass: SignInRepositoryImpl },
     { provide: AccountsRepository, useClass: AccountsRepositoryImpl },
     { provide: ExpensesRepository, useClass: ExpensesRepositoryImpl },
-    { provide: BillsRepository, useClass: BillsRepositoryImpl },
+    { provide: CreateAccountRepository, useClass: CreateAccountRepositoryImpl },
     { provide: ExpenseMonthlyRepository, useClass: ExpenseMonthlyRepositoryImpl },
     { provide: RecentTransactionRepository, useClass: RecentTransacionRepositoryImpl },
     { provide: RecentTransactionFilterRepository, useClass: RecentTransacionFilterRepositoryImpl },
