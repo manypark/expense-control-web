@@ -1,1 +1,1 @@
-export * from './create-account-repository';
+export * from './accounts-repository';

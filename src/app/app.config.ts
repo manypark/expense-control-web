@@ -12,7 +12,7 @@ import { ExpensesRepository } from './features/expenses/domain';
 import { ExpensesRepositoryImpl } from './features/expenses/infrastructure/repositories';
 import { BillsRepository } from './features/bills/domain';
 import { BillsRepositoryImpl } from './features/bills/infrastructure/repositories';
-import { CreateAccountRepository } from './features/cards/domain/repositories';
+import { CreateUpdateAccountRepository } from './features/cards/domain/repositories';
 import { CreateAccountRepositoryImpl } from './features/cards/infrastructure/repositories';
 import { SignInRepositoryImpl } from './features/auth/signIn/infrastructure/repositories/sign-in-repository';
 import { RecentTransactionFilterRepository } from './features/shared/components/common-table/domain/repositories';
@@ -38,7 +38,7 @@ export const appConfig: ApplicationConfig = {
     { provide: SignInRepository, useClass: SignInRepositoryImpl },
     { provide: AccountsRepository, useClass: AccountsRepositoryImpl },
     { provide: ExpensesRepository, useClass: ExpensesRepositoryImpl },
-    { provide: CreateAccountRepository, useClass: CreateAccountRepositoryImpl },
+    { provide: CreateUpdateAccountRepository, useClass: CreateAccountRepositoryImpl },
     { provide: ExpenseMonthlyRepository, useClass: ExpenseMonthlyRepositoryImpl },
     { provide: RecentTransactionRepository, useClass: RecentTransacionRepositoryImpl },
     { provide: RecentTransactionFilterRepository, useClass: RecentTransacionFilterRepositoryImpl },

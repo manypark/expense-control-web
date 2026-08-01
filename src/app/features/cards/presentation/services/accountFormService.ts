@@ -1,15 +1,15 @@
 import { inject, Service, signal } from "@angular/core";
 import { form, required } from "@angular/forms/signals";
 
-import { AccountsServices } from "./accountsServices";
-import { CreateAccountEntity } from "../../domain/entities";
+import { CreateUpdateServices } from "./accountsServices";
 import { AccountsEntity } from "../../../dashboard/domain/entities";
+import { CreateAccountEntity, UpdtaeAccountEntity } from "../../domain/entities";
 
 @Service()
 export class AccountFormService {
 
     private readonly editingAccountId = signal<string | null>(null);
-    private readonly createAccountServices = inject( AccountsServices );
+    private readonly createAccountService = inject( CreateUpdateServices );
     onAccountSaved?: () => void;
 
     readonly accountModel = signal<CreateAccountEntity>({
@@ -28,26 +28,37 @@ export class AccountFormService {
         {
             submission: {
                 action: async () => {
-
-                    const createAccount:CreateAccountEntity = {
-                        code    : this.accountModel().code,
-                        name    : this.accountModel().name,
-                        balance : this.accountModel().balance,
-                    };
-
-                    this.createAccountServices.createAccountMutation.mutate( createAccount );
-
+                    this.isEditing() ? this.updateAccountServices() : this.createAccountServices();
                     this.onAccountSaved?.();
-
                     this.resetForm();
-                    
                     return null;
                 },
             },
         }
     );
 
-    setAccountToEdit(account: AccountsEntity) {
+    createAccountServices() {
+        const createAccount:CreateAccountEntity = {
+            code    : this.accountModel().code,
+            name    : this.accountModel().name,
+            balance : this.accountModel().balance,
+        };
+
+        this.createAccountService.createAccountMutation.mutate( createAccount );
+    }
+
+    updateAccountServices() {
+        const updateAccount:UpdtaeAccountEntity  = {
+            code    : this.accountModel().code,
+            name    : this.accountModel().name,
+            balance : this.accountModel().balance,
+            id      : this.editingAccountId() ?? '',
+        };
+
+        this.createAccountService.updateAccountMutation.mutate( updateAccount );
+    }
+
+    setAccountToEdit( account : AccountsEntity ) {
         this.editingAccountId.set(account.id);
         this.accountModel.set({
             name   : account.name,
